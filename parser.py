@@ -59,14 +59,9 @@ def get_info(data):
         soup = Bs(res.text, 'lxml')
         contacts = soup.find_all('div', class_='ui-columns ui-columns--colcount_2 ui-columns--responsive-collapse')[1]
         try:
-            raw_phones = contacts.find_all('span')[2].text
-            phones = raw_phones.split(',')
-            numbers = []
-            for phone in phones:
-                if len(phone) > 10:
-                    numbers.append(phone)
+            phones = contacts.find_all('span')[2].text
         except IndexError:
-            numbers = 'Нет данных'
+            phones = 'Нет данных'
         try:
             adress = contacts.find('div', class_='margin-bottom-x-small font-size-medium').find_all\
             ('div')[0].text.strip()
@@ -79,7 +74,7 @@ def get_info(data):
         except (IndexError, ValueError):
             time = 'Время работы не указано'
 
-        new_data = {'phone': numbers, 'adress': adress, 'time': time}
+        new_data = {'phone': phones, 'adress': adress, 'time': time}
 
         entry.update(new_data)
         csv_writer(entry)
